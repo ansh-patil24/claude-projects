@@ -3,6 +3,7 @@ import type { GeoResult } from '../../types/geo'
 import type { AirQualityCurrent } from '../../types/weather'
 import { useAirQuality } from '../../hooks/useAirQuality'
 import { getEAQILabel, getEAQIBadgeClass } from '../../utils/aqi'
+import { formatNum } from '../../utils/number'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
@@ -19,7 +20,7 @@ const POLLUTANTS: Array<{ key: PollutantKey; label: string }> = [
 
 export function AQIPanel({ city }: { city: GeoResult }) {
   const { data, isLoading, isError } = useAirQuality(city.latitude, city.longitude)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   if (isLoading) {
     return (
@@ -37,7 +38,7 @@ export function AQIPanel({ city }: { city: GeoResult }) {
     <div className="bg-[#1e293b] rounded-2xl p-4 shadow-lg">
       <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{t('aqi.title')}</h3>
       <div className="flex items-center gap-3 mb-4">
-        <span className="text-4xl font-bold text-[#f1f5f9]">{aqi}</span>
+        <span className="text-4xl font-bold text-[#f1f5f9]">{formatNum(aqi, i18n.language)}</span>
         <span className={`px-2 py-0.5 rounded-lg text-xs font-semibold ${getEAQIBadgeClass(aqi)}`}>
           {t(getEAQILabel(aqi))}
         </span>
@@ -47,7 +48,7 @@ export function AQIPanel({ city }: { city: GeoResult }) {
           <div key={key} className="bg-slate-800/60 rounded-lg p-2 text-center">
             <p className="text-[10px] text-slate-400 mb-0.5">{label}</p>
             <p className="text-sm font-semibold text-[#f1f5f9]">
-              {Math.round(current[key])}
+              {formatNum(current[key], i18n.language)}
             </p>
           </div>
         ))}

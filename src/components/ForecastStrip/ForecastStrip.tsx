@@ -2,11 +2,12 @@ import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
 import { getWeatherEmoji, formatDayFromISO, formatDateFromISO, convertTemp } from '../../utils/weather'
+import { formatNum } from '../../utils/number'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
 export function ForecastStrip({ city, unit }: { city: GeoResult; unit: 'C' | 'F' }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
 
   if (isLoading) {
@@ -36,10 +37,10 @@ export function ForecastStrip({ city, unit }: { city: GeoResult; unit: 'C' | 'F'
               <span className="text-slate-500 text-[10px]">{formatDateFromISO(date)}</span>
               <span className="text-2xl">{getWeatherEmoji(data.daily.weather_code[idx])}</span>
               <span className="text-[#f1f5f9] font-semibold text-sm">
-                {convertTemp(data.daily.temperature_2m_max[idx], unit)}°
+                {formatNum(convertTemp(data.daily.temperature_2m_max[idx], unit), i18n.language)}°
               </span>
               <span className="text-slate-500 text-xs">
-                {convertTemp(data.daily.temperature_2m_min[idx], unit)}°
+                {formatNum(convertTemp(data.daily.temperature_2m_min[idx], unit), i18n.language)}°
               </span>
             </div>
           )

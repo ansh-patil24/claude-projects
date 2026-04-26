@@ -33,11 +33,10 @@ function App() {
           <p className="text-center text-sky-400 font-bold text-base tracking-widest uppercase mb-4">
             🌤 WeatherNow
           </p>
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
-              <SearchBar onCitySelect={setSelectedCity} />
-            </div>
-            <div className="flex items-center bg-slate-800 rounded-xl p-1 shrink-0">
+          <div className="flex flex-col gap-3">
+            <SearchBar onCitySelect={setSelectedCity} />
+            <div className="flex items-center justify-center gap-3">
+            <div className="flex items-center bg-slate-800 rounded-xl p-1">
               <button
                 onClick={() => setUnit('C')}
                 className={`px-3 py-1.5 rounded-lg text-sm font-semibold transition-colors ${unit === 'C' ? 'bg-sky-500 text-white' : 'text-slate-400 hover:text-slate-200'}`}
@@ -51,7 +50,7 @@ function App() {
                 °F
               </button>
             </div>
-            <div className="flex items-center bg-slate-800 rounded-xl px-3 py-2 shrink-0 gap-1.5">
+            <div className="flex items-center bg-slate-800 rounded-xl px-3 py-2 gap-1.5">
               <span className="text-base leading-none">🌐</span>
               <select
                 value={i18n.language}
@@ -62,6 +61,7 @@ function App() {
                   <option key={code} value={code} className="bg-slate-800 text-slate-200">{label}</option>
                 ))}
               </select>
+            </div>
             </div>
           </div>
         </header>

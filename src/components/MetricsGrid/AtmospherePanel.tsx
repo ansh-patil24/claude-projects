@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
+import { formatNum } from '../../utils/number'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
 export function AtmospherePanel({ city }: { city: GeoResult }) {
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   if (isLoading) {
     return (
@@ -18,12 +19,11 @@ export function AtmospherePanel({ city }: { city: GeoResult }) {
   if (isError || !data) return <ErrorMessage message={t('atmosphere.error')} />
 
   const { relative_humidity_2m, surface_pressure, visibility } = data.current
-  const visibilityKm = (visibility / 1000).toFixed(1)
 
   const stats = [
-    { icon: '💧', label: t('atmosphere.humidity'), value: `${relative_humidity_2m}%` },
-    { icon: '🌡️', label: t('atmosphere.pressure'), value: `${Math.round(surface_pressure)} hPa` },
-    { icon: '👁️', label: t('atmosphere.visibility'), value: `${visibilityKm} km` },
+    { icon: '💧', label: t('atmosphere.humidity'), value: `${formatNum(relative_humidity_2m, i18n.language)}%` },
+    { icon: '🌡️', label: t('atmosphere.pressure'), value: `${formatNum(Math.round(surface_pressure), i18n.language)} hPa` },
+    { icon: '👁️', label: t('atmosphere.visibility'), value: `${formatNum(visibility / 1000, i18n.language, 1)} km` },
   ]
 
   return (

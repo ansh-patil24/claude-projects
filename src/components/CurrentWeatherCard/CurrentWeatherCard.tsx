@@ -2,11 +2,12 @@ import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
 import { getWeatherEmoji, formatTimeFromISO, convertTemp } from '../../utils/weather'
+import { formatNum } from '../../utils/number'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
 export function CurrentWeatherCard({ city, unit }: { city: GeoResult; unit: 'C' | 'F' }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
 
   if (isLoading) {
@@ -37,20 +38,20 @@ export function CurrentWeatherCard({ city, unit }: { city: GeoResult; unit: 'C' 
 
       <div className="mt-5 flex items-end gap-4">
         <span className="text-8xl font-thin text-[#f1f5f9] leading-none">
-          {convertTemp(current.temperature_2m, unit)}°
+          {formatNum(convertTemp(current.temperature_2m, unit), i18n.language)}°
         </span>
         <div className="pb-1">
-          <p className="text-slate-400 text-sm">{t('current.feelsLike')} {convertTemp(current.apparent_temperature, unit)}°{unit}</p>
+          <p className="text-slate-400 text-sm">{t('current.feelsLike')} {formatNum(convertTemp(current.apparent_temperature, unit), i18n.language)}°{unit}</p>
           <p className="text-slate-200 font-medium mt-0.5">{t('wmo.' + current.weather_code, { defaultValue: '—' })}</p>
         </div>
       </div>
 
       <div className="mt-5 pt-4 border-t border-slate-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
         <span className="text-slate-400">
-          {t('current.high')} <span className="text-[#f1f5f9] font-medium">{convertTemp(daily.temperature_2m_max[0], unit)}°</span>
+          {t('current.high')} <span className="text-[#f1f5f9] font-medium">{formatNum(convertTemp(daily.temperature_2m_max[0], unit), i18n.language)}°</span>
         </span>
         <span className="text-slate-400">
-          {t('current.low')} <span className="text-[#f1f5f9] font-medium">{convertTemp(daily.temperature_2m_min[0], unit)}°</span>
+          {t('current.low')} <span className="text-[#f1f5f9] font-medium">{formatNum(convertTemp(daily.temperature_2m_min[0], unit), i18n.language)}°</span>
         </span>
         <span className="ml-auto text-slate-400">
           🌅 <span className="text-[#f1f5f9]">{sunriseTime}</span>

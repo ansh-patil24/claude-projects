@@ -2,12 +2,13 @@ import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
 import { degreesToCompass, msToKmh } from '../../utils/wind'
+import { formatNum } from '../../utils/number'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
 export function WindPanel({ city }: { city: GeoResult }) {
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   if (isLoading) {
     return (
@@ -26,11 +27,11 @@ export function WindPanel({ city }: { city: GeoResult }) {
       <div className="flex items-center justify-between">
         <div>
           <div className="flex items-end gap-1.5">
-            <span className="text-4xl font-bold text-[#f1f5f9]">{msToKmh(wind_speed_10m)}</span>
+            <span className="text-4xl font-bold text-[#f1f5f9]">{formatNum(msToKmh(wind_speed_10m), i18n.language)}</span>
             <span className="text-slate-400 text-sm pb-1">km/h</span>
           </div>
           <p className="text-slate-400 text-sm mt-2">
-            {t('wind.gusts')}: <span className="text-slate-300">{msToKmh(wind_gusts_10m)} km/h</span>
+            {t('wind.gusts')}: <span className="text-slate-300">{formatNum(msToKmh(wind_gusts_10m), i18n.language)} km/h</span>
           </p>
         </div>
         <div className="flex flex-col items-center gap-1.5">
