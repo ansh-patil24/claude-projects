@@ -1,9 +1,9 @@
 export function getUVLabel(uv: number): string {
-  if (uv <= 2) return 'Low'
-  if (uv <= 5) return 'Moderate'
-  if (uv <= 7) return 'High'
-  if (uv <= 10) return 'Very High'
-  return 'Extreme'
+  if (uv <= 2) return 'uv.low'
+  if (uv <= 5) return 'uv.moderate'
+  if (uv <= 7) return 'uv.high'
+  if (uv <= 10) return 'uv.veryHigh'
+  return 'uv.extreme'
 }
 
 export function getUVColorClass(uv: number): string {

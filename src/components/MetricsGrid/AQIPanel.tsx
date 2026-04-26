@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import type { AirQualityCurrent } from '../../types/weather'
 import { useAirQuality } from '../../hooks/useAirQuality'
@@ -18,6 +19,7 @@ const POLLUTANTS: Array<{ key: PollutantKey; label: string }> = [
 
 export function AQIPanel({ city }: { city: GeoResult }) {
   const { data, isLoading, isError } = useAirQuality(city.latitude, city.longitude)
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
@@ -26,18 +28,18 @@ export function AQIPanel({ city }: { city: GeoResult }) {
       </div>
     )
   }
-  if (isError || !data) return <ErrorMessage message="Air quality unavailable" />
+  if (isError || !data) return <ErrorMessage message={t('aqi.error')} />
 
   const current: AirQualityCurrent = data.current
   const aqi = current.european_aqi
 
   return (
     <div className="bg-[#1e293b] rounded-2xl p-4 shadow-lg">
-      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Air Quality</h3>
+      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{t('aqi.title')}</h3>
       <div className="flex items-center gap-3 mb-4">
         <span className="text-4xl font-bold text-[#f1f5f9]">{aqi}</span>
         <span className={`px-2 py-0.5 rounded-lg text-xs font-semibold ${getEAQIBadgeClass(aqi)}`}>
-          {getEAQILabel(aqi)}
+          {t(getEAQILabel(aqi))}
         </span>
       </div>
       <div className="grid grid-cols-3 gap-1.5">

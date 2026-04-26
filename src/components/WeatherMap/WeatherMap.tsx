@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
@@ -9,7 +10,7 @@ import type { GeoResult } from '../../types/geo'
 import { MapController } from './MapController'
 import { useRainViewer } from '../../hooks/useRainViewer'
 import { useWeather } from '../../hooks/useWeather'
-import { getWeatherEmoji, getWeatherDescription } from '../../utils/weather'
+import { getWeatherEmoji } from '../../utils/weather'
 import { RAINVIEWER_TILE_BASE } from '../../config'
 
 // Fix Leaflet default marker icons broken by Vite's asset bundling
@@ -25,6 +26,7 @@ const LAYER_LABELS: Record<MapLayer, string> = {
 }
 
 export function WeatherMap({ city }: { city: GeoResult }) {
+  const { t } = useTranslation()
   const [activeLayer, setActiveLayer] = useState<MapLayer>('radar')
   const { data: rvData } = useRainViewer()
   const { data: weather } = useWeather(city.latitude, city.longitude)
@@ -86,7 +88,7 @@ export function WeatherMap({ city }: { city: GeoResult }) {
                 <div style={{ fontSize: 12, marginTop: 4, color: '#94a3b8' }}>
                   {getWeatherEmoji(weather.current.weather_code)}{' '}
                   {Math.round(weather.current.temperature_2m)}°C &middot;{' '}
-                  {getWeatherDescription(weather.current.weather_code)}
+                  {t('wmo.' + weather.current.weather_code, { defaultValue: '—' })}
                 </div>
               )}
             </Popup>

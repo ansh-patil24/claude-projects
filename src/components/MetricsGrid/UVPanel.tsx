@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
 import { getUVLabel, getUVColorClass, getUVBarWidth } from '../../utils/uv'
@@ -6,6 +7,7 @@ import { ErrorMessage } from '../ErrorMessage'
 
 export function UVPanel({ city }: { city: GeoResult }) {
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
+  const { t } = useTranslation()
 
   if (isLoading) {
     return (
@@ -14,16 +16,16 @@ export function UVPanel({ city }: { city: GeoResult }) {
       </div>
     )
   }
-  if (isError || !data) return <ErrorMessage message="UV data unavailable" />
+  if (isError || !data) return <ErrorMessage message={t('uv.error')} />
 
   const uv = data.daily.uv_index_max[0] ?? 0
 
   return (
     <div className="bg-[#1e293b] rounded-2xl p-4 shadow-lg">
-      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">UV Index</h3>
+      <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">{t('uv.title')}</h3>
       <div className="flex items-end gap-2 mb-5">
         <span className={`text-4xl font-bold ${getUVColorClass(uv)}`}>{Math.round(uv)}</span>
-        <span className={`text-sm font-semibold pb-1 ${getUVColorClass(uv)}`}>{getUVLabel(uv)}</span>
+        <span className={`text-sm font-semibold pb-1 ${getUVColorClass(uv)}`}>{t(getUVLabel(uv))}</span>
       </div>
       <div className="h-2.5 bg-slate-700 rounded-full overflow-hidden">
         <div
@@ -35,10 +37,10 @@ export function UVPanel({ city }: { city: GeoResult }) {
         />
       </div>
       <div className="flex justify-between text-[10px] text-slate-500 mt-1.5">
-        <span>Low</span>
-        <span>Moderate</span>
-        <span>High</span>
-        <span>Extreme</span>
+        <span>{t('uv.low')}</span>
+        <span>{t('uv.moderate')}</span>
+        <span>{t('uv.high')}</span>
+        <span>{t('uv.extreme')}</span>
       </div>
     </div>
   )

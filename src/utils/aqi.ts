@@ -1,10 +1,10 @@
 export function getEAQILabel(aqi: number): string {
-  if (aqi <= 20) return 'Good'
-  if (aqi <= 40) return 'Fair'
-  if (aqi <= 60) return 'Moderate'
-  if (aqi <= 80) return 'Poor'
-  if (aqi <= 100) return 'Very Poor'
-  return 'Extremely Poor'
+  if (aqi <= 20) return 'aqi.good'
+  if (aqi <= 40) return 'aqi.fair'
+  if (aqi <= 60) return 'aqi.moderate'
+  if (aqi <= 80) return 'aqi.poor'
+  if (aqi <= 100) return 'aqi.veryPoor'
+  return 'aqi.extremelyPoor'
 }
 
 export function getEAQIBadgeClass(aqi: number): string {

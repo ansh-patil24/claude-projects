@@ -1,10 +1,12 @@
+import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useWeather } from '../../hooks/useWeather'
-import { getWeatherEmoji, getWeatherDescription, formatTimeFromISO } from '../../utils/weather'
+import { getWeatherEmoji, formatTimeFromISO, convertTemp } from '../../utils/weather'
 import { LoadingSpinner } from '../LoadingSpinner'
 import { ErrorMessage } from '../ErrorMessage'
 
-export function CurrentWeatherCard({ city }: { city: GeoResult }) {
+export function CurrentWeatherCard({ city, unit }: { city: GeoResult; unit: 'C' | 'F' }) {
+  const { t } = useTranslation()
   const { data, isLoading, isError } = useWeather(city.latitude, city.longitude)
 
   if (isLoading) {
@@ -14,7 +16,7 @@ export function CurrentWeatherCard({ city }: { city: GeoResult }) {
       </div>
     )
   }
-  if (isError || !data) return <ErrorMessage message="Failed to load weather data" />
+  if (isError || !data) return <ErrorMessage message={t('current.error')} />
 
   const { current, daily } = data
   const localTime = formatTimeFromISO(current.time)
@@ -35,20 +37,20 @@ export function CurrentWeatherCard({ city }: { city: GeoResult }) {
 
       <div className="mt-5 flex items-end gap-4">
         <span className="text-8xl font-thin text-[#f1f5f9] leading-none">
-          {Math.round(current.temperature_2m)}°
+          {convertTemp(current.temperature_2m, unit)}°
         </span>
         <div className="pb-1">
-          <p className="text-slate-400 text-sm">Feels like {Math.round(current.apparent_temperature)}°C</p>
-          <p className="text-slate-200 font-medium mt-0.5">{getWeatherDescription(current.weather_code)}</p>
+          <p className="text-slate-400 text-sm">{t('current.feelsLike')} {convertTemp(current.apparent_temperature, unit)}°{unit}</p>
+          <p className="text-slate-200 font-medium mt-0.5">{t('wmo.' + current.weather_code, { defaultValue: '—' })}</p>
         </div>
       </div>
 
       <div className="mt-5 pt-4 border-t border-slate-700 flex flex-wrap gap-x-6 gap-y-1 text-sm">
         <span className="text-slate-400">
-          High <span className="text-[#f1f5f9] font-medium">{Math.round(daily.temperature_2m_max[0])}°</span>
+          {t('current.high')} <span className="text-[#f1f5f9] font-medium">{convertTemp(daily.temperature_2m_max[0], unit)}°</span>
         </span>
         <span className="text-slate-400">
-          Low <span className="text-[#f1f5f9] font-medium">{Math.round(daily.temperature_2m_min[0])}°</span>
+          {t('current.low')} <span className="text-[#f1f5f9] font-medium">{convertTemp(daily.temperature_2m_min[0], unit)}°</span>
         </span>
         <span className="ml-auto text-slate-400">
           🌅 <span className="text-[#f1f5f9]">{sunriseTime}</span>

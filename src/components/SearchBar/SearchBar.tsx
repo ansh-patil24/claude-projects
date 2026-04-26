@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { GeoResult } from '../../types/geo'
 import { useGeoSearch } from '../../hooks/useGeoSearch'
 import { LoadingSpinner } from '../LoadingSpinner'
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export function SearchBar({ onCitySelect }: Props) {
+  const { t } = useTranslation()
   const [inputValue, setInputValue] = useState('')
   const [debouncedQuery, setDebouncedQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
@@ -67,7 +69,7 @@ export function SearchBar({ onCitySelect }: Props) {
           onChange={e => setInputValue(e.target.value)}
           onFocus={() => suggestions.length > 0 && setIsOpen(true)}
           onKeyDown={handleKeyDown}
-          placeholder="Search for a city..."
+          placeholder={t('search.placeholder')}
           className="w-full bg-[#1e293b] text-[#f1f5f9] placeholder-slate-500 rounded-2xl pl-12 pr-12 py-4 text-lg focus:outline-none focus:ring-2 focus:ring-sky-500 border border-slate-700 transition-all"
           autoComplete="off"
         />
