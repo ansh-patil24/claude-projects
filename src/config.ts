@@ -1,0 +1,5 @@
+export const OPEN_METEO_BASE = 'https://api.open-meteo.com/v1'
+export const OPEN_METEO_GEO_BASE = 'https://geocoding-api.open-meteo.com/v1'
+export const OPEN_METEO_AQ_BASE = 'https://air-quality-api.open-meteo.com/v1'
+export const RAINVIEWER_API = 'https://api.rainviewer.com/public/weather-maps.json'
+export const RAINVIEWER_TILE_BASE = 'https://tilecache.rainviewer.com'
